@@ -1,0 +1,24 @@
+<form #personForm="ngForm" novalidate>
+  <div fxLayout="row" fxLayoutGap="20px" class="push" fxLayout.xs="column">
+    <mat-input-container fxFlex>
+      <input matInput name="firstName" #firstNameElement #firstNameControl="ngModel" placeholder="Put first name in" required maxlength="50"
+        [(ngModel)]="person.firstName">
+      <mat-hint align="start">
+        <span [hidden]="!firstNameControl.errors?.required || firstNameControl.pristine" class="tc-red-600">
+          Required
+        </span>
+      </mat-hint>
+      <mat-hint align="end">{{firstNameElement.value.length}} / 50</mat-hint>
+    </mat-input-container>
+    <mat-input-container fxFlex>
+      <input matInput name="lastName" #lastNameElement #lastNameControl="ngModel" placeholder="Put last name in" required maxlength="50"
+        [(ngModel)]="person.lastName">
+      <mat-hint align="start">
+        <span [hidden]="!lastNameControl.errors?.required || lastNameControl.pristine" class="tc-red-600">
+            Required
+          </span>
+      </mat-hint>
+      <mat-hint align="end">{{lastNameElement.value.length}} / 50</mat-hint>
+    </mat-input-container>
+  </div>
+</form>

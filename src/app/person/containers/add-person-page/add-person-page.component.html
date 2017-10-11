@@ -1,0 +1,23 @@
+<mat-card>
+    <mat-card-title>New person</mat-card-title>
+    <mat-card-subtitle>Fill the form and submit</mat-card-subtitle>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+        <app-person-form #personForm (valid)="handleValid($event)"></app-person-form>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="handleSubmit(personForm.person)" [disabled]="!(valid$ | async)">
+            <mat-icon>send</mat-icon>
+            <span>Create</span>
+        </button>
+        <button mat-raised-button color="accent"  (click)="goBack()">
+            <mat-icon>undo</mat-icon>
+            <span>Go back</span>
+        </button>
+        <a mat-raised-button color="accent" routerLink="..">
+            <mat-icon>list</mat-icon>
+            <span>To persons table</span>
+        </a>
+    </mat-card-actions>
+</mat-card>

@@ -1,0 +1,19 @@
+<mat-toolbar>
+  <button mat-button (click)="loadAddresses()">
+    Refresh!
+  </button>
+  <a mat-button routerLink="../add">
+    Create a Address for this Person
+  </a>
+</mat-toolbar>
+<mat-card>
+  <mat-card-title>
+    All the Addresses of this Person
+  </mat-card-title>
+  <mat-card-subtitle>
+    Created Addresses are displayed
+  </mat-card-subtitle>
+  <mat-card-content>
+    <app-addresses-table [data]="addresses$ | async" (onDelete)="handleDelete($event)" (onSelect)="handleSelect($event)"></app-addresses-table>
+  </mat-card-content>
+</mat-card>

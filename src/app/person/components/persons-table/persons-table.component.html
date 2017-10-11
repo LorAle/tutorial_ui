@@ -1,0 +1,13 @@
+<td-data-table #table [data]="data" [columns]="columns" *ngIf="!isEmpty; else hasData">
+  <ng-template tdDataTableTemplate="actions" let-row="row">
+    <button color="warn" mat-icon-button matTooltip="Delete" (click)="triggerDelete(row)">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button color="primary" mat-icon-button matTooltip="Details" matTooltipPosition="above" (click)="triggerSelect(row)">
+      <mat-icon>info_outline</mat-icon>
+    </button>
+  </ng-template>
+</td-data-table>
+<ng-template #hasData>
+  <p>No data present</p>
+</ng-template>

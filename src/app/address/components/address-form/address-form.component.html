@@ -1,0 +1,14 @@
+<form #addressForm="ngForm" novalidate>
+  <div fxLayout="row" fxLayoutGap="20px" class="push" fxLayout.xs="column">
+    <mat-input-container fxFlex>
+      <input matInput name="fullAddress" #fullAddressElement #fullAddressControl="ngModel" placeholder="Put address in" required maxlength="50"
+        [(ngModel)]="address.fullAddress">
+      <mat-hint align="end">{{fullAddressElement.value.length}}/50</mat-hint>
+      <mat-hint align="start">
+        <span [hidden]="!fullAddressControl.errors?.required || fullAddressControl.pristine" class="tc-red-600">
+          Required
+        </span>
+      </mat-hint>
+    </mat-input-container>
+  </div>
+</form> 

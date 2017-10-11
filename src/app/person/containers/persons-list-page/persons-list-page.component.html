@@ -1,0 +1,17 @@
+<mat-toolbar>
+  <button mat-button (click)="loadPersons()">
+        Refresh!
+      </button>
+  <a mat-button routerLink="add">
+        Create a person
+      </a>
+</mat-toolbar>
+<mat-card>
+  <mat-card-title>
+    All the persons
+  </mat-card-title>
+  <mat-card-subtitle>Created persons are displayed</mat-card-subtitle>
+  <mat-card-content>
+    <app-persons-table [data]="persons$ | async" (onDelete)="handleDelete($event)" (onSelect)="handleSelect($event)"></app-persons-table>
+  </mat-card-content>
+</mat-card>
