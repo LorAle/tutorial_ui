@@ -1,9 +1,14 @@
+import { PagedQuery } from '../../../models/index';
 import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { PersonService } from './../../../services/person/person.service';
 import { PersonPresentation } from './../../../models/person/person';
+
+import { Store } from '@ngrx/store';
+import * as PersonActions from 'app/services/actions/person-actions';
+import * as fromRoot from 'app/reducers/reducers';
 
 @Component({
   selector: 'app-persons-list-page',
@@ -16,7 +21,8 @@ export class PersonsListPageComponent implements OnInit {
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
-    private _personService: PersonService
+    private _personService: PersonService,
+    private store: Store<fromRoot.State>
   ) { }
 
   ngOnInit() {
@@ -50,10 +56,20 @@ export class PersonsListPageComponent implements OnInit {
   // root/persons/:event.id
 
   loadPersons() {
-    this.persons$ = this._personService.queryPersons({
+    const params = {
       page: 1,
       pageSize: 20,
       filter: null
-    });
+    };
+    console.log('load');
+    this.store.dispatch(new PersonActions.QueryPersons(params));
+    console.log('dispatch');
+    this.persons$ = this.store.select(fromRoot.selectPersons);
+    console.log('select');
+    // this.persons$ = this._personService.queryPersons({
+    //   page: 1,
+    //   pageSize: 20,
+    //   filter: null
+    // });
   }
 }

@@ -1,3 +1,6 @@
+import { PersonEffects } from './services/effects/person-effects';
+import { EffectsModule } from '@ngrx/effects';
+import { reducers } from './reducers/reducers';
 
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,6 +22,8 @@ import { CredentialInterceptorProvider, ErrorInterceptorProvider } from './inter
 import { AppComponent } from './app.component';
 import { PersonService } from './services';
 
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -31,7 +36,10 @@ import { PersonService } from './services';
     HttpClientModule,
     HttpModule,
     SharedModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StoreModule.provideStore(reducers),
+    EffectsModule.run(PersonEffects),
+    StoreDevtoolsModule.instrumentOnlyWithExtension()
   ],
   providers: [
     // Interceptors
