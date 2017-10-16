@@ -18,9 +18,9 @@ const initialState: State = {
         pageSize: 20,
         filter: null
     },
-    persons: [],
+    persons: null,
     selectedPerson: null,
-    addresses: []
+    addresses: null
 };
 
 export function reducer(state = initialState, action: PersonActions.All) {

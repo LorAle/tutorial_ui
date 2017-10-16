@@ -61,11 +61,8 @@ export class PersonsListPageComponent implements OnInit {
       pageSize: 20,
       filter: null
     };
-    console.log('load');
     this.store.dispatch(new PersonActions.QueryPersons(params));
-    console.log('dispatch');
     this.persons$ = this.store.select(fromRoot.selectPersons);
-    console.log('select');
     // this.persons$ = this._personService.queryPersons({
     //   page: 1,
     //   pageSize: 20,
