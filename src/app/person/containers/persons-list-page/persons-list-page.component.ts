@@ -1,3 +1,5 @@
+import { AddressPresentation } from '../../../models/address/index';
+import { Person } from '../../../models/person/index';
 import { PagedQuery } from '../../../models/index';
 import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -15,9 +17,11 @@ import * as fromRoot from 'app/reducers/reducers';
   templateUrl: './persons-list-page.component.html',
   styleUrls: ['./persons-list-page.component.css']
 })
+
 export class PersonsListPageComponent implements OnInit {
   persons$: Observable<PersonPresentation[]>;
-
+  selectedPerson$: Observable<Person>;
+  selectedAddress$: Observable<AddressPresentation>;
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
@@ -43,17 +47,11 @@ export class PersonsListPageComponent implements OnInit {
       });
   }
 
-  // root/persons
   handleSelect(event: PersonPresentation) {
-    // navigation parameters array
     this._router.navigate([event.id], {
       relativeTo: this._route
     });
-    // // root/persons/:event.id
-    // this._router.navigate(['/persons', event.id]);
-    // this._router.navigateByUrl(`/persons/${event.id}`);
   }
-  // root/persons/:event.id
 
   loadPersons() {
     const params = {
@@ -63,10 +61,7 @@ export class PersonsListPageComponent implements OnInit {
     };
     this.store.dispatch(new PersonActions.QueryPersons(params));
     this.persons$ = this.store.select(fromRoot.selectPersons);
-    // this.persons$ = this._personService.queryPersons({
-    //   page: 1,
-    //   pageSize: 20,
-    //   filter: null
-    // });
+    this.selectedPerson$ = this.store.select(fromRoot.selectPerson);
+    this.selectedAddress$ = this.store.select(fromRoot.selectAddress);
   }
 }

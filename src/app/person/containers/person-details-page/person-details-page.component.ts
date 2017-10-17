@@ -1,3 +1,4 @@
+import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +7,9 @@ import { Location } from '@angular/common';
 
 import { PersonService } from 'app/services';
 import { PersonDetails, Person } from 'app/models/person';
+
+import * as PersonActions from 'app/services/actions/person-actions';
+import * as fromRoot from 'app/reducers/reducers';
 
 @Component({
   selector: 'app-person-details-page',
@@ -21,24 +25,17 @@ export class PersonDetailsPageComponent implements OnInit {
   constructor(
     private _personService: PersonService,
     private _route: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    private store: Store<fromRoot.State>
   ) {
-    // Alternative
-    // this.id = +this._route.snapshot.paramMap.get('id');
+    this.id = +this._route.snapshot.paramMap.get('id');
+    this.store.dispatch(new PersonActions.GetPerson(this.id));
   }
 
-  // local/persons/1000
-  // anfrage schicken
-  // bearbeite...
-  // local/person/2000
-  // vorherige anfrage abbrechen
-  // anfrage schciken
-  // bearbeite
   ngOnInit() {
-    this.person$ = this._route.paramMap
-      .switchMap(params => this._personService.getPerson(+params.get('id')));
-    this.personData$ = this.person$
-      .map(p => new Person(p.firstName, p.lastName, new Date(p.dateOfBirth)));
+    console.log('start');
+    this.personData$ = this.store.select(fromRoot.selectPerson);
+    console.log('ende');
   }
 
   handleSubmit(data: Person) {
@@ -52,7 +49,6 @@ export class PersonDetailsPageComponent implements OnInit {
       error => {
         console.log('Absturz');
       });
-
   }
 
   handleValid(event: boolean) {

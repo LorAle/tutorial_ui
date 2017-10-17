@@ -1,3 +1,4 @@
+import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +7,9 @@ import { Location } from '@angular/common';
 
 import { PersonService } from 'app/services';
 import { AddressPresentation } from 'app/models/address';
+import * as fromRoot from 'app/reducers/reducers';
+import * as personActions from 'app/services/actions/person-actions';
+
 @Component({
   selector: 'app-address-details-page',
   templateUrl: './address-details-page.component.html',
@@ -15,17 +19,25 @@ export class AddressDetailsPageComponent implements OnInit {
   personId$: Observable<number>;
   addresses$: Observable<AddressPresentation[]>;
   valid$ = new BehaviorSubject<boolean>(true);
-  address: AddressPresentation;
+  address$: Observable<AddressPresentation>;
   personId: number;
   private id: number;
 
   constructor(
     private _personService: PersonService,
     private _route: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    private _store: Store<fromRoot.State>
   ) {
     // Alternative
-    // this.id = +this._route.snapshot.paramMap.get('id');
+    this.personId = +this._route.parent.parent.snapshot.paramMap.get('id');
+    const params = {
+      page: 1,
+      pageSize: 20,
+      filter: null
+    };
+    console.log(this.personId);
+    this._store.dispatch(new personActions.GetAddressFromPerson({ id: this.personId, params: params }));
   }
 
   // local/persons/1000
@@ -36,24 +48,25 @@ export class AddressDetailsPageComponent implements OnInit {
   // anfrage schciken
   // bearbeite
   ngOnInit() {
-    this.personId$ = this._route.parent.parent.parent.paramMap.map(x => x.get('id')).map(v => +v);
-    this.addresses$ = this.personId$.switchMap(y => {
-      this.personId = y;
-      return this._personService.queryAddressesFromPerson(y, {
-        page: 1,
-        pageSize: 20,
-        filter: null
-      });
-    }
-    );
+    // this.personId$ = this._route.parent.parent.parent.paramMap.map(x => x.get('id')).map(v => +v);
+    // this.addresses$ = this.personId$.switchMap(y => {
+    //   this.personId = y;
+    //   return this._personService.queryAddressesFromPerson(y, {
+    //     page: 1,
+    //     pageSize: 20,
+    //     filter: null
+    //   });
+    // }
+    // );
 
-    this.addresses$.forEach(x => {
-      x.map(y => {
-        if (y.id === this.personId) {
-          this.address = y;
-        }
-      });
-    });
+    // this.addresses$.forEach(x => {
+    //   x.map(y => {
+    //     if (y.id === this.personId) {
+    //       this.address = y;
+    //     }
+    //   });
+    // });
+    this.address$ = this._store.select(fromRoot.selectAddress);
   }
 
   handleSubmit(data: AddressPresentation) {

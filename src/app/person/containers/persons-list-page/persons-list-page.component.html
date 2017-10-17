@@ -10,7 +10,10 @@
   <mat-card-title>
     All the persons
   </mat-card-title>
-  <mat-card-subtitle>Created persons are displayed</mat-card-subtitle>
+  <mat-card-subtitle>
+    <p>{{(selectedPerson$ | async) | json}}</p>
+    <p>{{(selectedAddress$ | async) | json}}</p>
+  </mat-card-subtitle>
   <mat-card-content>
     <app-persons-table [data]="persons$ | async" (onDelete)="handleDelete($event)" (onSelect)="handleSelect($event)"></app-persons-table>
   </mat-card-content>

@@ -1,3 +1,4 @@
+import { Person, PersonDetails } from '../models/person/index';
 import * as fromPerson from '../services/reducers/person-reducer';
 
 export interface State {
@@ -13,11 +14,19 @@ export function selectPersons(state: State) {
 }
 
 export function selectPerson(state: State) {
-    return state.search.selectedPerson;
+    return <Person>state.search.selectedPerson;
+}
+
+export function selectPersonDetails(state: State) {
+    return <PersonDetails>state.search.selectedPerson;
 }
 
 export function selectAddresses(state: State) {
     return state.search.addresses;
+}
+
+export function selectAddress(state: State) {
+    return state.search.selectedAddress;
 }
 
 export function selectSearchTerms(state: State) {

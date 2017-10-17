@@ -1,3 +1,4 @@
+import { Store } from '@ngrx/store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -5,6 +6,8 @@ import { Observable } from 'rxjs/Observable';
 import { AddressPresentation } from 'app/models/address';
 import { PersonService } from './../../../services/person/person.service';
 
+import * as fromRoot from 'app/reducers/reducers';
+import * as personActions from 'app/services/actions/person-actions';
 @Component({
   selector: 'app-addresses-list-page',
   templateUrl: './addresses-list-page.component.html',
@@ -19,8 +22,17 @@ export class AddressesListPageComponent implements OnInit {
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
-    private _personService: PersonService
-  ) { }
+    private _personService: PersonService,
+    private _store: Store<fromRoot.State>
+  ) {
+    const params = {
+      page: 1,
+      pageSize: 20,
+      filter: null
+    };
+
+    this._store.dispatch(new personActions.QueryAddressesFromPerson({ id: this.personId, params: params }));
+  }
 
   ngOnInit() {
     // console.log(this._route.parent.parent.params.map(x =>  +x.get('id')));
@@ -58,6 +70,7 @@ export class AddressesListPageComponent implements OnInit {
 
   loadAddresses() {
     console.log('load');
+    this.addresses$ = this._store.select(fromRoot.selectAddresses);
     this.addresses$ = this.personId$.switchMap(y => {
       this.personId = y;
       return this._personService.queryAddressesFromPerson(y, {
